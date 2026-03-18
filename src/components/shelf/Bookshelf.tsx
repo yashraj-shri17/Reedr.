@@ -1,13 +1,15 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { ShelfRow } from './ShelfRow'
+import { BookDetailsModal } from './BookDetailsModal'
 
 interface Book {
   id: string
   title: string
   author: string
   coverUrl?: string
+  description?: string
 }
 
 interface BookshelfProps {
@@ -18,6 +20,8 @@ interface BookshelfProps {
 }
 
 export default function Bookshelf({ books, shelf, isPublicView, onBookClick }: BookshelfProps) {
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null)
+
   // Organize books into rows (PRD 9.1: 3-4 visible on mobile, etc.)
   // We'll group them for desktop perspective
   const booksPerRow = 8
@@ -28,6 +32,14 @@ export default function Bookshelf({ books, shelf, isPublicView, onBookClick }: B
 
   if (rows.length === 0) rows.push([])
 
+  const handleBookClick = (book: Book) => {
+    if (onBookClick) {
+      onBookClick(book)
+    } else {
+      setSelectedBook(book)
+    }
+  }
+
   return (
     <div className={`w-full py-12 ${shelf?.theme || 'minimalist'}`}>
       <div className="container mx-auto">
@@ -35,10 +47,15 @@ export default function Bookshelf({ books, shelf, isPublicView, onBookClick }: B
           <ShelfRow 
             key={rowIndex} 
             books={row} 
-            onBookClick={onBookClick} 
+            onBookClick={handleBookClick} 
           />
         ))}
       </div>
+
+      <BookDetailsModal 
+        book={selectedBook} 
+        onClose={() => setSelectedBook(null)} 
+      />
     </div>
   )
 }
