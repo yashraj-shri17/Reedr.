@@ -51,8 +51,8 @@ export async function middleware(request: NextRequest) {
 
   // Protected routes: (main) group
   // We check if the pathname starts with a route that should be protected.
-  // In our structure, (main) routes include /shelf, /discover, /search, /settings, /pricing
-  const protectedRoutes = ['/shelf', '/discover', '/search', '/settings', '/pricing']
+  // In our structure, (main) routes include /shelf, /search, /settings, /pricing
+  const protectedRoutes = ['/shelf', '/search', '/settings', '/pricing']
   const isProtectedRoute = protectedRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
   )
