@@ -44,7 +44,9 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable} antialiased selection:bg-accent/30`}
       >
         <ThemeProvider>
-          {children}
+          <div className="relative isolate grainy min-h-screen">
+            {children}
+          </div>
           <Toaster position="bottom-center" richColors />
         </ThemeProvider>
       </body>

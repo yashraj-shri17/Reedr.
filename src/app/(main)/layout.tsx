@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { PageTransition } from '@/components/layout/PageTransition'
 
 export default async function MainLayout({
   children,
@@ -18,11 +19,11 @@ export default async function MainLayout({
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
       <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-4xl">
         <div className="glass-panel px-8 py-4 rounded-[2rem] flex items-center justify-between border-white/40 shadow-2xl">
-          <Link href="/shelf" className="text-xl font-bold tracking-[0.4em] uppercase hover:text-accent transition-all duration-300">
+          <Link href="/" className="text-xl font-bold tracking-[0.4em] uppercase hover:text-accent transition-all duration-300">
             REEDR
           </Link>
           
-          <nav className="flex items-center gap-2">
+          <nav className="flex flex-wrap items-center justify-center gap-1">
             {[
               { href: '/shelf', label: 'Shelf' },
               { href: '/discover', label: 'Discover' },
@@ -41,10 +42,10 @@ export default async function MainLayout({
         </div>
       </header>
 
-      <main className="flex-1 pt-24 pb-12">
-        <div className="max-w-7xl mx-auto px-6">
+      <main className="flex-1 pt-32 pb-12">
+        <PageTransition>
           {children}
-        </div>
+        </PageTransition>
       </main>
     </div>
   )

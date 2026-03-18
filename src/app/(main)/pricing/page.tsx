@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { PageTransition } from '@/components/layout/PageTransition'
 
 export default function PricingPage() {
   const [loading, setLoading] = useState(false)
@@ -23,82 +24,91 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto py-24 px-4 space-y-20 selection:bg-accent/30">
-      <header className="text-center space-y-4 max-w-3xl mx-auto">
-        <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-foreground">Choose your level</h1>
-        <p className="text-muted text-lg md:text-xl font-medium opacity-60 leading-relaxed">
-          Support the artisan reading experience and unlock advanced boutique features for your collection.
-        </p>
-      </header>
+    <PageTransition>
+      <div className="max-w-6xl mx-auto py-32 px-4 space-y-24 selection:bg-accent/30 grainy">
+        <header className="text-center space-y-6 max-w-3xl mx-auto">
+          <p className="text-accent font-black uppercase tracking-[0.6em] text-xs">Exhibition Access</p>
+          <h1 className="text-6xl md:text-9xl font-black tracking-tighter text-foreground font-serif text-gradient leading-none">Choose your level</h1>
+          <p className="text-muted text-lg md:text-xl font-medium italic opacity-60 leading-relaxed font-serif">
+            Support the artisan reading experience and unlock advanced boutique features for your collection.
+          </p>
+        </header>
 
-      <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-        {/* Standard Tier */}
-        <div className="glass-panel rounded-[3.5rem] p-12 flex flex-col space-y-10 group hover:shadow-2xl transition-all duration-500">
-          <div className="space-y-4">
-            <h2 className="text-3xl font-black uppercase tracking-widest text-foreground">Standard</h2>
-            <div className="flex items-baseline gap-2">
-              <span className="text-6xl font-black text-foreground">$0</span>
-              <span className="text-muted font-bold uppercase tracking-widest text-xs opacity-60">/ Lifetime</span>
+        <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto items-start">
+          {/* Standard Tier */}
+          <div className="glass-panel rounded-[4rem] p-12 md:p-16 flex flex-col space-y-12 group hover:shadow-2xl transition-all duration-700">
+            <div className="space-y-4">
+              <h2 className="text-sm font-black uppercase tracking-[0.4em] text-muted opacity-40">Standard Gallery</h2>
+              <div className="flex items-baseline gap-2">
+                <span className="text-7xl font-black text-foreground">$0</span>
+                <span className="text-muted font-black uppercase tracking-widest text-[10px] opacity-40">/ Lifetime</span>
+              </div>
             </div>
+            
+            <ul className="space-y-6 flex-1">
+              {[
+                'Single High-Resolution Shelf',
+                'Verified Public Profile',
+                '3 AI Discoveries per month',
+                'Standard Atmosphere'
+              ].map((feature, i) => (
+                <li key={i} className="flex items-center gap-4 text-xs font-black uppercase tracking-widest opacity-40">
+                  <div className="w-5 h-5 rounded-full bg-border/40 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                  </div>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            
+            <button className="w-full py-6 rounded-2xl border-2 border-border font-black text-[10px] uppercase tracking-[0.3em] text-muted cursor-not-allowed" disabled>
+              Active Membership
+            </button>
           </div>
-          
-          <ul className="space-y-6 flex-1">
-            {[
-              'Single 3D Bookshelf',
-              'Public Profile URL',
-              '3 AI Recommendations / month',
-              'Standard Textures'
-            ].map((feature, i) => (
-              <li key={i} className="flex items-center gap-4 text-sm font-bold opacity-70">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-accent/40"><path d="M20 6 9 17l-5-5"/></svg>
-                {feature}
-              </li>
-            ))}
-          </ul>
-          
-          <button className="w-full py-5 rounded-2xl border-2 border-border font-black text-[10px] uppercase tracking-[0.2em] text-muted cursor-not-allowed" disabled>
-            Current Access
-          </button>
-        </div>
 
-        {/* Plus Tier */}
-        <div className="glass-panel border-4 border-accent rounded-[3.5rem] p-12 flex flex-col space-y-10 relative overflow-hidden group hover:shadow-2xl hover:shadow-accent/10 transition-all duration-500 bg-accent/5">
-          <div className="absolute top-8 right-8 bg-accent text-white px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
-            Preferred
-          </div>
-          
-          <div className="space-y-4">
-            <h2 className="text-3xl font-black uppercase tracking-widest text-accent">Plus</h2>
-            <div className="flex items-baseline gap-2">
-              <span className="text-6xl font-black text-foreground">$2.99</span>
-              <span className="text-muted font-bold uppercase tracking-widest text-xs opacity-60">/ Month</span>
+          {/* Plus Tier */}
+          <div className="glass-panel border-2 border-accent/20 rounded-[4rem] p-12 md:p-16 flex flex-col space-y-12 relative overflow-hidden group hover:shadow-3xl hover:shadow-accent/15 transition-all duration-700 bg-accent/[0.03] scale-105">
+            <div className="absolute top-0 right-0 p-8">
+               <div className="bg-accent text-white px-5 py-2 text-[10px] font-black uppercase tracking-[0.3em] rounded-full shadow-2xl">
+                Boutique
+              </div>
             </div>
-          </div>
-          
-          <ul className="space-y-6 flex-1">
-            {[
-              'Unlimited Shelves',
-              'Advanced Sub-ratings',
-              'Custom Boutique Textures',
-              'Unlimited AI Discovery',
-              'Watermark-free Identity Cards'
-            ].map((feature, i) => (
-              <li key={i} className="flex items-center gap-4 text-sm font-black text-foreground">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-accent"><path d="M20 6 9 17l-5-5"/></svg>
-                {feature}
-              </li>
-            ))}
-          </ul>
+            
+            <div className="space-y-4">
+              <h2 className="text-sm font-black uppercase tracking-[0.4em] text-accent">Reedr Plus</h2>
+              <div className="flex items-baseline gap-2">
+                <span className="text-7xl font-black text-foreground">$2.99</span>
+                <span className="text-muted font-black uppercase tracking-widest text-[10px] opacity-60">/ Month</span>
+              </div>
+            </div>
+            
+            <ul className="space-y-6 flex-1">
+              {[
+                'Unlimited Themed Shelves',
+                'Advanced Analytic Ratings',
+                'Custom Atmosphere Textures',
+                'Unlimited AI Mood Discovery',
+                'Signature Identity Cards'
+              ].map((feature, i) => (
+                <li key={i} className="flex items-center gap-4 text-xs font-black uppercase tracking-widest text-foreground">
+                  <div className="w-5 h-5 rounded-full bg-accent flex items-center justify-center text-white shadow-lg shadow-accent/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                  </div>
+                  {feature}
+                </li>
+              ))}
+            </ul>
 
-          <button 
-            onClick={handleUpgrade}
-            disabled={loading}
-            className="btn-primary w-full py-6"
-          >
-            {loading ? 'Opening Vault...' : 'Upgrade to PLUS'}
-          </button>
+            <button 
+              onClick={handleUpgrade}
+              disabled={loading}
+              className="btn-primary w-full py-8 text-xs shadow-2xl shadow-accent/40"
+            >
+              {loading ? 'Curating Plus Benefits...' : 'Claim Plus Access'}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </PageTransition>
   )
 }

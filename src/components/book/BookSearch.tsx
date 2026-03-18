@@ -87,31 +87,32 @@ export function BookSearch({ shelfId }: { shelfId: string }) {
               key={`${book.isbn13}-${idx}`}
               className="glass-panel p-8 rounded-[3.5rem] flex flex-col sm:flex-row gap-8 group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-none"
             >
-              <div className="w-32 h-44 bg-surface flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl transition-transform duration-500 group-hover:scale-105 border border-border/10">
-                {book.coverUrl ? (
-                  <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full bg-accent/5 flex flex-col items-center justify-center p-4 text-center">
-                    <span className="text-[10px] font-black text-accent uppercase line-clamp-3 leading-tight tracking-tighter opacity-70">{book.title}</span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="flex-1 flex flex-col justify-between space-y-6">
-                <div className="space-y-3">
-                  <h3 className="font-black text-2xl md:text-3xl leading-tight text-foreground line-clamp-2 group-hover:text-accent transition-colors">
-                    {book.title}
-                  </h3>
-                  <p className="text-lg text-muted font-medium italic opacity-90 font-serif">by {book.author}</p>
+                <div className="w-32 h-44 bg-surface flex-shrink-0 rounded-2xl overflow-hidden shadow-2xl transition-transform duration-500 group-hover:scale-105 border border-border/10 relative isolate perspective-1000 preserve-3d">
+                  {book.coverUrl ? (
+                    <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-accent/5 flex flex-col items-center justify-center p-4 text-center">
+                      <span className="text-[10px] font-black text-accent uppercase line-clamp-3 leading-tight tracking-tighter opacity-70 font-serif">{book.title}</span>
+                    </div>
+                  )}
+                  <div className="absolute inset-0 spine-lighting pointer-events-none" />
                 </div>
                 
-                <button
-                  onClick={() => onAddBook(book)}
-                  className="w-full py-5 border-2 border-accent/20 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.3em] text-accent hover:bg-accent hover:text-white hover:shadow-lg hover:shadow-accent/30 transition-all duration-500"
-                >
-                  Add to Shelf
-                </button>
-              </div>
+                <div className="flex-1 flex flex-col justify-between space-y-6">
+                  <div className="space-y-3">
+                    <h3 className="font-black text-2xl md:text-3xl leading-tight text-foreground line-clamp-2 group-hover:text-accent transition-colors font-serif">
+                      {book.title}
+                    </h3>
+                    <p className="text-lg text-muted font-medium italic opacity-90 font-serif">by {book.author}</p>
+                  </div>
+                  
+                  <button
+                    onClick={() => onAddBook(book)}
+                    className="w-full py-5 border-2 border-accent/20 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] text-accent hover:bg-accent hover:text-white hover:shadow-lg hover:shadow-accent/30 transition-all duration-500"
+                  >
+                    Exhibit Masterpiece
+                  </button>
+                </div>
             </div>
           ))}
         </div>
