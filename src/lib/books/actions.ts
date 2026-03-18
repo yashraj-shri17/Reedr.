@@ -207,3 +207,45 @@ export async function updateShelfTheme(shelfId: string, theme: string) {
   revalidatePath('/shelf')
   return { success: true }
 }
+
+export async function updateBookDetails(userBookId: string, data: any) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('Unauthorized')
+
+  const { error } = await (supabase as any)
+    .from('user_books')
+    .update({ 
+      ...data,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', userBookId)
+    .eq('user_id', user.id)
+
+  if (error) throw error
+
+  revalidatePath('/shelf')
+  return { success: true }
+}
+
+export async function updateReadingGoal(target: number) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('Unauthorized')
+
+  const year = new Date().getFullYear()
+
+  await supabaseAdmin
+    .from('reading_goals')
+    .upsert({
+      user_id: user.id,
+      year: year,
+      target_books: target,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id,year' })
+
+  revalidatePath('/shelf')
+  return { success: true }
+}

@@ -9,10 +9,14 @@ import { BookDetailOverlay } from '@/components/book/BookDetailOverlay'
 import { CurrentlyReading } from '@/components/shelf/CurrentlyReading'
 import { ProgressModal } from '@/components/shelf/ProgressModal'
 import { ThemeSwitcher } from '@/components/theme/ThemeSwitcher'
+import { ReadingGoal } from '@/components/profile/ReadingGoalTracker'
+import { Recommendations } from '@/components/shelf/Recommendations'
+import { ShelfSwitcher } from '@/components/shelf/ShelfSwitcher'
+import { ReadingStreak } from '@/components/profile/ReadingStreak'
 import ShareProfileButton from '@/components/profile/ShareProfileButton'
 
 export default function ShelfPage() {
-  const { shelf, books, loading, username, refresh } = useShelf()
+  const { shelf, books, goal, loading, username, refresh } = useShelf()
   const { currentTheme } = useShelfTheme()
   const themeDisplayNames: Record<string, string> = {
     minimalist: 'Boutique',
@@ -32,6 +36,13 @@ export default function ShelfPage() {
     )
   }
 
+  // Count 'read' books for goal
+  const readCount = books.filter((b: any) => b.reading_status === 'read').length
+  // Note: The original instruction included `setGoal(prev => ({ ...prev, current: readCount }))`
+  // but `setGoal` is not available here. Assuming `goal` from `useShelf` is already updated.
+  // If `goal.current` needs to reflect `readCount` immediately, `useShelf` would need to handle it,
+  // or a local state for `goal` would be needed. For now, `goal.current` from `useShelf` is used.
+
   const currentlyReading = books.find((b: any) => b.reading_status === 'currently_reading') || books[0]
 
   return (
@@ -49,19 +60,34 @@ export default function ShelfPage() {
           </div>
         </div>
         
-        <div className="flex items-center gap-6">
-          {username && (
-            <div className="hidden sm:block">
-              <ShareProfileButton username={username} />
-            </div>
-          )}
-          <ThemeSwitcher shelfId={shelf?.id} />
-          <div className="px-8 py-4 glass-panel rounded-3xl flex items-center gap-4">
-            <div className="text-right">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Total Books</p>
-              <p className="text-2xl font-black text-foreground">{books.length}</p>
-            </div>
-          </div>
+        <div className="flex flex-col xl:flex-row xl:items-center gap-8 w-full">
+           {/* Shelf Switcher (Multiple Shelves) */}
+           <div className="flex-1">
+             <ShelfSwitcher />
+           </div>
+           
+           <div className="flex flex-wrap items-center gap-6">
+              {/* Reading Goal Progress */}
+              <ReadingGoal current={goal.current} target={goal.target} />
+
+              {/* Reading Streak (Plus) */}
+              <ReadingStreak days={12} />
+              
+              <div className="flex items-center gap-4">
+                 <ThemeSwitcher shelfId={shelf?.id} />
+                 
+                 <div className="px-8 py-5 bg-foreground text-background rounded-[2.5rem] flex items-center gap-4 shadow-2xl transition-transform hover:scale-105 cursor-default">
+                   <div className="text-right">
+                     <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Library Count</p>
+                     <p className="text-2xl font-black">{books.length}</p>
+                   </div>
+                   <div className="h-8 w-px bg-white/10" />
+                   <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center opacity-40">
+                      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+                   </div>
+                 </div>
+              </div>
+           </div>
         </div>
       </header>
       {/* Mobile share button */}
@@ -80,7 +106,13 @@ export default function ShelfPage() {
         </section>
       )}
 
-      <section className="space-y-8">
+      <section className="space-y-16 pt-16">
+        <div className="flex items-center gap-4 px-4">
+           <div className="h-px flex-1 bg-accent/10" />
+           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-muted">Primary Collection</p>
+           <div className="h-px flex-1 bg-accent/10" />
+        </div>
+        
         {books.length > 0 ? (
           <div className="relative">
             <Bookshelf 
@@ -106,6 +138,11 @@ export default function ShelfPage() {
             </Link>
           </div>
         )}
+      </section>
+
+      {/* Passive Recommendations Section */}
+      <section className="pb-32">
+        <Recommendations />
       </section>
 
       <ProgressModal 

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 export function useShelf() {
   const [shelf, setShelf] = useState<any>(null)
   const [books, setBooks] = useState<any[]>([])
+  const [goal, setGoal] = useState<{ current: number, target: number }>({ current: 0, target: 50 })
   const [username, setUsername] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
@@ -18,6 +19,7 @@ export function useShelf() {
         { id: 'b1', title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', coverUrl: 'https://covers.openlibrary.org/b/isbn/9780141439570-L.jpg', pages_read: 210, total_pages: 324, reading_status: 'currently_reading' },
         { id: 'b2', title: '1984', author: 'George Orwell', coverUrl: 'https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg', pages_read: 420, total_pages: 420, reading_status: 'read' },
       ])
+      setGoal({ current: 1, target: 20 })
       setLoading(false)
       return
     }
@@ -30,8 +32,10 @@ export function useShelf() {
       return
     }
 
-    // Fetch primary shelf and username
-    const [shelfRes, userRes] = await Promise.all([
+    const year = new Date().getFullYear()
+
+    // Fetch primary shelf, username, and reading goal
+    const [shelfRes, userRes, goalRes] = await Promise.all([
       (supabase as any)
         .from('shelves')
         .select('*')
@@ -43,14 +47,25 @@ export function useShelf() {
         .from('users')
         .select('username')
         .eq('id', user.id)
-        .single()
+        .single(),
+      (supabase as any)
+        .from('reading_goals')
+        .select('target_books')
+        .eq('user_id', user.id)
+        .eq('year', year)
+        .maybeSingle()
     ])
 
     const shelfData = shelfRes.data
     const profileData = userRes.data
+    const goalData = goalRes.data
 
     if (profileData?.username) {
       setUsername(profileData.username)
+    }
+
+    if (goalData) {
+      setGoal(prev => ({ ...prev, target: goalData.target_books }))
     }
 
     if (shelfData) {
@@ -64,10 +79,17 @@ export function useShelf() {
           reading_status,
           pages_read,
           total_pages,
+          rating,
+          rating_plot,
+          rating_characters,
+          rating_writing,
+          rating_enjoyment,
+          notes,
           works (
             canonical_title,
             canonical_author,
-            primary_cover_url
+            primary_cover_url,
+            genres
           )
         `)
         .eq('shelf_id', shelfData.id)
@@ -81,9 +103,20 @@ export function useShelf() {
           coverUrl: ub.works.primary_cover_url,
           pages_read: ub.pages_read || 0,
           total_pages: ub.total_pages || 0,
-          reading_status: ub.reading_status
+          reading_status: ub.reading_status,
+          rating: ub.rating,
+          rating_plot: ub.rating_plot,
+          rating_characters: ub.rating_characters,
+          rating_writing: ub.rating_writing,
+          rating_enjoyment: ub.rating_enjoyment,
+          notes: ub.notes,
+          genres: ub.works.genres
         }))
         setBooks(formattedBooks)
+        
+        // Count 'read' books for goal
+        const readCount = formattedBooks.filter((b: any) => b.reading_status === 'read').length
+        setGoal(prev => ({ ...prev, current: readCount }))
       }
     }
     setLoading(false)
@@ -93,5 +126,5 @@ export function useShelf() {
     fetchShelf()
   }, [fetchShelf])
 
-  return { shelf, books, loading, username, refresh: fetchShelf }
+  return { shelf, books, goal, loading, username, refresh: fetchShelf }
 }
