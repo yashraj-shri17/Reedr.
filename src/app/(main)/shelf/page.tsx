@@ -46,18 +46,18 @@ export default function ShelfPage() {
   const currentlyReading = books.find((b: any) => b.reading_status === 'currently_reading') || books[0]
 
   return (
-    <div className="max-w-7xl mx-auto space-y-24 py-16 px-4">
-      <header className="space-y-12">
+    <div className="max-w-7xl mx-auto space-y-24 py-24 px-4">
+      <header className="space-y-16">
         {/* Layer 1: Identity & Primary Navigation */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-accent/10 pb-16">
           <div className="space-y-4">
-            <h1 className="text-7xl md:text-9xl font-bold text-foreground tracking-tighter leading-[0.8]">
-              {shelf?.name || 'Library'}
+            <h1 className="text-8xl md:text-[10rem] font-black text-foreground tracking-tighter leading-[0.75] font-serif">
+              {shelf?.name || 'My Shelf'}
             </h1>
             <div className="flex items-center gap-3">
                <div className="h-px w-12 bg-accent opacity-60" />
-                <p className="text-muted text-sm font-bold uppercase tracking-[0.3em] opacity-90">
-                  Curated in <span className="text-accent">{themeDisplayNames[currentTheme]}</span>
+                <p className="text-accent text-[10px] font-black uppercase tracking-[0.4em] opacity-80">
+                  Curated in <span className="underline underline-offset-8">{themeDisplayNames[currentTheme]}</span>
                 </p>
             </div>
           </div>
@@ -68,27 +68,31 @@ export default function ShelfPage() {
           </div>
         </div>
 
-        {/* Layer 2: Functional Stats & Switcher */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center bg-accent/[0.02] p-8 rounded-[3rem] border border-accent/5 shadow-inner">
-          <div className="lg:col-span-4">
-            <ShelfSwitcher />
-          </div>
-          
-          <div className="lg:col-span-8 flex flex-wrap items-center justify-end gap-6">
-            <ReadingGoal current={goal.current} target={goal.target} />
-            <ReadingStreak days={12} />
-            
-            <div className="px-8 py-5 bg-foreground text-background rounded-[2.5rem] flex items-center gap-4 shadow-2xl transition-transform hover:scale-105 cursor-default">
-              <div className="text-right">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Total Pieces</p>
-                <p className="text-2xl font-black">{books.length}</p>
-              </div>
-              <div className="h-8 w-px bg-white/10" />
-              <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center opacity-40">
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
-              </div>
-            </div>
-          </div>
+        {/* Layer 2: Dashboard Metrics Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+           {/* Shelf Switcher */}
+           <ShelfSwitcher />
+           
+           {/* Reading Goal Progress */}
+           <ReadingGoal current={goal.current} target={goal.target} />
+
+           {/* Reading Streak */}
+           <ReadingStreak days={12} />
+           
+           {/* Total Collection Stats */}
+           <div className="glass-panel p-6 rounded-[2rem] flex flex-col justify-between h-44 w-full shadow-2xl transition-all hover:scale-[1.02] cursor-default bg-foreground text-background">
+             <div className="flex justify-between items-start">
+               <div className="w-10 h-10 bg-background/10 rounded-xl flex items-center justify-center opacity-40">
+                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/></svg>
+               </div>
+               <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">Verified Collection</p>
+             </div>
+             
+             <div className="space-y-1">
+               <p className="text-4xl font-black">{books.length} Pieces</p>
+               <p className="text-[10px] font-black uppercase tracking-widest opacity-30">Total in Library</p>
+             </div>
+           </div>
         </div>
       </header>
       {/* Mobile share button */}

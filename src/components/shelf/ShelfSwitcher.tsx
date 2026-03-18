@@ -9,17 +9,21 @@ export function ShelfSwitcher() {
   const shelves = ["Primary Gallery", "Current Favorites", "Dark Academia Collection"]
 
   return (
-    <div className="relative z-50">
+    <div className="relative z-50 h-44 w-full">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-4 bg-background border border-border px-8 py-4 rounded-3xl hover:border-accent/40 transition-all group shadow-sm bg-white"
+        className="w-full h-full flex flex-col justify-between p-6 bg-surface border border-border rounded-[2rem] hover:border-accent/40 transition-all group shadow-sm"
       >
-        <div className="text-left">
+        <div className="flex justify-between items-start w-full">
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted opacity-60">Active Exhibition</p>
-          <p className="text-base font-black text-foreground">{currentShelf}</p>
+          <div className={`w-8 h-8 rounded-full bg-accent/5 flex items-center justify-center text-accent transition-transform shadow-inner ${isOpen ? 'rotate-180' : ''}`}>
+             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
         </div>
-        <div className={`w-8 h-8 rounded-full bg-accent/5 flex items-center justify-center text-accent transition-transform ${isOpen ? 'rotate-180' : ''}`}>
-           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m6 9 6 6 6-6"/></svg>
+        
+        <div className="text-left space-y-1">
+          <p className="text-3xl font-black text-foreground truncate">{currentShelf}</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-muted opacity-50">Private Collection</p>
         </div>
       </button>
 
