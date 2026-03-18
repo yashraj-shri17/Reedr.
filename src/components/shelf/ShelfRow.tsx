@@ -69,7 +69,7 @@ export function ShelfRow({ books, onBookClick }: ShelfRowProps) {
         </div>
 
         {/* Books Container */}
-        <div className="absolute bottom-6 left-0 w-full flex items-end gap-1 md:gap-2 overflow-x-auto pb-10 px-8 shelf-row scroll-smooth no-scrollbar z-20 mask-fade-edges">
+        <div className="absolute bottom-6 left-0 w-full flex items-end justify-center gap-1 md:gap-2 overflow-x-auto pb-10 px-8 shelf-row scroll-smooth no-scrollbar z-20 mask-fade-edges">
           {books.map((book) => (
             <BookSpine
               key={book.id}
@@ -79,7 +79,6 @@ export function ShelfRow({ books, onBookClick }: ShelfRowProps) {
               onClick={() => onBookClick?.(book)}
             />
           ))}
-          <div className="flex-1 min-w-[50px]" />
         </div>
       </div>
     </div>
