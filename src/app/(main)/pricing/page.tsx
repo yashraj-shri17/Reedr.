@@ -73,8 +73,8 @@ export default function PricingPage() {
     setLoadingId(priceId)
     try {
       await createCheckoutSession(priceId)
-    } catch (e) {
-      toast.error("Stripe keys are not configured yet. Please check your .env file.")
+    } catch (e: any) {
+      toast.error(e.message || "Failed to initiate checkout. Please ensure you have restarted your server after adding .env keys.")
       console.error(e)
     } finally {
       setLoadingId(null)
