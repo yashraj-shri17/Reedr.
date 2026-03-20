@@ -16,11 +16,11 @@ export default async function SettingsPage() {
 
   return (
     <PageTransition>
-      <div className="max-w-4xl mx-auto py-32 px-4 space-y-24 selection:bg-accent/30 grainy">
+      <div className="max-w-4xl mx-auto py-12 md:py-32 px-4 space-y-12 md:space-y-24 selection:bg-accent/30 grainy">
         <header className="flex flex-col md:flex-row md:items-end justify-between gap-10">
           <div className="space-y-6">
-            <p className="text-accent font-black uppercase tracking-[0.4em] text-xs">Curation Console</p>
-            <h1 className="text-6xl md:text-9xl font-black tracking-tight text-foreground font-serif text-gradient leading-none">Settings</h1>
+            <p className="text-accent font-black uppercase tracking-[0.4em] text-[10px] md:text-xs">Curation Console</p>
+            <h1 className="text-4xl md:text-9xl font-black tracking-tight text-foreground font-serif text-gradient leading-none">Settings</h1>
             <p className="text-muted text-lg md:text-xl font-medium italic opacity-60 leading-relaxed font-serif">Manage your digital collection and boutique identity.</p>
           </div>
           {profile?.username && (
@@ -36,11 +36,11 @@ export default async function SettingsPage() {
 
         <div className="grid gap-16">
           {/* Profile Section */}
-          <section className="glass-panel overflow-hidden rounded-[3rem] relative">
-             <div className="absolute top-0 right-0 p-8">
+          <section className="glass-panel overflow-hidden rounded-[2rem] md:rounded-[3rem] relative">
+             <div className="absolute top-0 right-0 p-4 md:p-8 hidden md:block">
                <div className="text-[8px] font-black uppercase tracking-[0.4em] text-accent opacity-20 transform rotate-90 origin-right">Identity Meta</div>
              </div>
-            <div className="p-10 md:p-16 space-y-12">
+            <div className="p-6 md:p-16 space-y-8 md:space-y-12">
               <div className="flex items-center gap-6">
                  <div className="h-px w-12 bg-accent/40" />
                  <h2 className="text-sm font-black uppercase tracking-[0.4em] text-foreground">Boutique Profile</h2>
@@ -51,13 +51,13 @@ export default async function SettingsPage() {
           </section>
 
           {/* Tools Section */}
-          <div className="grid md:grid-cols-2 gap-10">
-             <section className="glass-panel p-12 rounded-[3.5rem] space-y-8 flex flex-col group border-none">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-10">
+             <section className="glass-panel p-6 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] space-y-6 md:space-y-8 flex flex-col group border-none">
                <div className="space-y-4">
                  <h2 className="text-xs font-black uppercase tracking-[0.4em] text-foreground">Import Tools</h2>
                  <p className="text-sm text-muted font-medium opacity-60 leading-relaxed font-serif">Transfer your library from Goodreads or StoryGraph effortlessly.</p>
                </div>
-               <div className="pt-8 mt-auto">
+               <div className="pt-4 md:pt-8 mt-auto">
                  <Link 
                    href="/settings/import" 
                    className="w-full inline-flex items-center justify-center gap-3 py-5 rounded-2xl border-2 border-accent/20 text-accent text-[10px] font-black uppercase tracking-[0.3em] hover:bg-accent hover:text-white hover:shadow-xl hover:shadow-accent/20 transition-all duration-500"
@@ -68,7 +68,7 @@ export default async function SettingsPage() {
                </div>
              </section>
 
-             <section className="glass-panel p-12 rounded-[3.5rem] space-y-8 flex flex-col bg-accent/[0.03] border-accent/10">
+             <section className="glass-panel p-6 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] space-y-6 md:space-y-8 flex flex-col bg-accent/[0.03] border-accent/10">
                <div className="space-y-4">
                  <h2 className="text-xs font-black uppercase tracking-[0.4em] text-accent">Gallery Tier</h2>
                  <div className="flex items-center gap-3">
@@ -76,7 +76,7 @@ export default async function SettingsPage() {
                    <span className="bg-accent text-white px-3 py-1 text-[8px] font-black uppercase tracking-widest rounded-lg italic">Standard</span>
                  </div>
                </div>
-               <div className="pt-8 mt-auto">
+               <div className="pt-4 md:pt-8 mt-auto">
                   <Link href="/pricing" className="btn-primary w-full inline-block text-center py-5 text-xs shadow-2xl shadow-accent/20">
                     Upgrade to PLUS
                   </Link>
@@ -85,12 +85,12 @@ export default async function SettingsPage() {
           </div>
 
           {/* Danger Zone */}
-          <section className="p-10 md:p-16 border-2 border-dashed border-red-500/10 rounded-[3.5rem] flex flex-col md:flex-row justify-between items-center gap-10 bg-red-500/[0.01]">
+          <section className="p-8 md:p-16 border-2 border-dashed border-red-500/10 rounded-[2.5rem] md:rounded-[3.5rem] flex flex-col md:flex-row justify-between items-center gap-8 md:gap-10 bg-red-500/[0.01]">
             <div className="space-y-2 text-center md:text-left">
               <h3 className="text-xs font-black uppercase tracking-[0.4em] text-red-500/60">Deactivate Account</h3>
-              <p className="text-sm text-muted font-medium italic opacity-60 font-serif">Permanently remove your boutique and collection from REEDR Gallery.</p>
+              <p className="text-xs md:text-sm text-muted font-medium italic opacity-60 font-serif">Permanently remove your boutique and collection from REEDR Gallery.</p>
             </div>
-            <button className="border-2 border-red-500/10 text-red-500/50 px-10 py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-red-500 hover:text-white hover:border-red-500 hover:shadow-xl hover:shadow-red-500/20 transition-all duration-500">
+            <button className="w-full md:w-auto border-2 border-red-500/10 text-red-500/50 px-10 py-5 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] hover:bg-red-500 hover:text-white hover:border-red-500 hover:shadow-xl hover:shadow-red-500/20 transition-all duration-500">
               Destroy Records
             </button>
           </section>
