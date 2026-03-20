@@ -113,7 +113,8 @@ export function useShelf() {
           rating_writing: ub.rating_writing,
           rating_enjoyment: ub.rating_enjoyment,
           notes: ub.notes,
-          genres: ub.works.genres
+          genres: ub.works.genres,
+          work_id: ub.work_id
         }))
         setBooks(formattedBooks)
         

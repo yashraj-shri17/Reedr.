@@ -214,16 +214,29 @@ export async function updateBookDetails(userBookId: string, data: any) {
 
   if (!user) throw new Error('Unauthorized')
 
+  // Sanitize ratings: convert 0 to null to pass DB CHECK (rating >= 0.25)
+  const sanitizedData = { ...data }
+  const ratingKeys = ['rating', 'rating_plot', 'rating_characters', 'rating_writing', 'rating_enjoyment']
+  
+  ratingKeys.forEach(key => {
+    if (sanitizedData[key] === 0) {
+      sanitizedData[key] = null
+    }
+  })
+
   const { error } = await (supabase as any)
     .from('user_books')
     .update({ 
-      ...data,
+      ...sanitizedData,
       updated_at: new Date().toISOString()
     })
     .eq('id', userBookId)
     .eq('user_id', user.id)
 
-  if (error) throw error
+  if (error) {
+    console.error("Update book details error:", error)
+    throw error
+  }
 
   revalidatePath('/shelf')
   return { success: true }
