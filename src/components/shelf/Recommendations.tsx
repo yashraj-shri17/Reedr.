@@ -3,21 +3,41 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 
-export function Recommendations() {
+export function Recommendations({ seedBook }: { seedBook?: any }) {
   const [recommendations, setRecommendations] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Mock recommendations for now to simulate "Based on your shelf"
-    setTimeout(() => {
-      setRecommendations([
-        { title: "Project Hail Mary", author: "Andy Weir", coverUrl: "https://covers.openlibrary.org/b/id/11182470-L.jpg" },
-        { title: "Circe", author: "Madeline Miller", coverUrl: "https://covers.openlibrary.org/b/id/9264426-L.jpg" },
-        { title: "Klara and the Sun", author: "Kazuo Ishiguro", coverUrl: "https://covers.openlibrary.org/b/id/10542385-L.jpg" }
-      ])
-      setLoading(false)
-    }, 1500)
-  }, [])
+    const fetchRecommendations = async () => {
+      // If no book, just show some default high-quality classics
+      const query = seedBook ? `subject:${seedBook.author}` : 'subject:literature+classic'
+      
+      try {
+        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=4`)
+        const data = await response.json()
+        
+        if (data.items) {
+          const recs = data.items.map((item: any) => ({
+            title: item.volumeInfo.title,
+            author: item.volumeInfo.authors?.[0] || 'Unknown',
+            coverUrl: item.volumeInfo.imageLinks?.thumbnail?.replace('http:', 'https:') || `https://covers.openlibrary.org/b/id/12836262-L.jpg`
+          }))
+          setRecommendations(recs)
+        }
+      } catch (error) {
+        console.error("Failed to fetch recs:", error)
+        // Fallback to static if API fails
+        setRecommendations([
+          { title: "Project Hail Mary", author: "Andy Weir", coverUrl: "https://covers.openlibrary.org/b/id/11182470-L.jpg" },
+          { title: "Circe", author: "Madeline Miller", coverUrl: "https://covers.openlibrary.org/b/id/9264426-L.jpg" }
+        ])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchRecommendations()
+  }, [seedBook])
 
   if (loading) {
     return (

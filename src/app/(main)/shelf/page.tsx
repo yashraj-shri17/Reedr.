@@ -147,7 +147,7 @@ export default function ShelfPage() {
 
       {/* Passive Recommendations Section */}
       <section className="pb-32">
-        <Recommendations />
+        <Recommendations seedBook={currentlyReading} />
       </section>
 
       <ProgressModal 

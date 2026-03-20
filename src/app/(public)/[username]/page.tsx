@@ -76,11 +76,11 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
             <div className="space-y-2">
               <p className="text-xs font-black uppercase tracking-[0.6em] text-accent opacity-60">Verified Reader</p>
               {user.display_name && (
-                <h1 className="text-6xl md:text-8xl font-black tracking-tight text-foreground font-serif text-gradient">
+                <h1 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tight text-foreground font-serif text-gradient break-words leading-tight px-4 max-w-4xl mx-auto">
                   {user.display_name}
                 </h1>
               )}
-              <p className="text-sm font-black uppercase tracking-[0.4em] opacity-40">@{user.username}</p>
+              <p className="text-[10px] md:text-sm font-black uppercase tracking-[0.4em] opacity-40 break-all px-4 max-w-md mx-auto line-clamp-1">@{user.username}</p>
             </div>
             
             {user.bio ? (
