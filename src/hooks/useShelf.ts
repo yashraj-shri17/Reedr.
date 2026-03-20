@@ -1,11 +1,13 @@
 import { createClient } from '@/lib/supabase/client'
 import { useState, useEffect, useCallback } from 'react'
+import { updateStreak } from '@/lib/books/actions'
 
 export function useShelf() {
   const [shelf, setShelf] = useState<any>(null)
   const [books, setBooks] = useState<any[]>([])
   const [goal, setGoal] = useState<{ current: number, target: number }>({ current: 0, target: 50 })
   const [username, setUsername] = useState<string | null>(null)
+  const [streak, setStreak] = useState(0)
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
@@ -45,7 +47,7 @@ export function useShelf() {
         .single(),
       (supabase as any)
         .from('users')
-        .select('username')
+        .select('username, current_streak')
         .eq('id', user.id)
         .single(),
       (supabase as any)
@@ -62,6 +64,7 @@ export function useShelf() {
 
     if (profileData?.username) {
       setUsername(profileData.username)
+      setStreak(profileData.current_streak || 0)
     }
 
     if (goalData) {
@@ -124,7 +127,8 @@ export function useShelf() {
 
   useEffect(() => {
     fetchShelf()
+    updateStreak() // Attempt to update streak on every shelf visit
   }, [fetchShelf])
 
-  return { shelf, books, goal, loading, username, refresh: fetchShelf }
+  return { shelf, books, goal, streak, loading, username, refresh: fetchShelf }
 }

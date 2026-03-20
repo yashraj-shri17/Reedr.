@@ -16,7 +16,7 @@ import { ReadingStreak } from '@/components/profile/ReadingStreak'
 import ShareProfileButton from '@/components/profile/ShareProfileButton'
 
 export default function ShelfPage() {
-  const { shelf, books, goal, loading, username, refresh } = useShelf()
+  const { shelf, books, goal, streak, loading, username, refresh } = useShelf()
   const { currentTheme } = useShelfTheme()
   const themeDisplayNames: Record<string, string> = {
     minimalist: 'Boutique',
@@ -77,7 +77,7 @@ export default function ShelfPage() {
            <ReadingGoal current={goal.current} target={goal.target} />
 
            {/* Reading Streak */}
-           <ReadingStreak days={12} />
+           <ReadingStreak days={streak} />
            
            {/* Total Collection Stats */}
            <div className="glass-panel p-6 rounded-[2rem] flex flex-col justify-between h-44 w-full shadow-2xl transition-all hover:scale-[1.02] cursor-default bg-foreground text-background">

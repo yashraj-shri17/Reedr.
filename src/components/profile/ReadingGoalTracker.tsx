@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { updateReadingGoal } from '@/lib/books/actions'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 interface ReadingGoalProps {
   current: number
@@ -10,6 +11,7 @@ interface ReadingGoalProps {
 }
 
 export function ReadingGoal({ current, target }: ReadingGoalProps) {
+  const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
   const [newTarget, setNewTarget] = useState(target)
   const percentage = Math.min(100, (current / target) * 100)
@@ -19,6 +21,7 @@ export function ReadingGoal({ current, target }: ReadingGoalProps) {
       await updateReadingGoal(newTarget)
       setIsEditing(false)
       toast.success("Reading goal updated")
+      router.refresh()
     } catch (e) {
       toast.error("Failed to update goal")
     }

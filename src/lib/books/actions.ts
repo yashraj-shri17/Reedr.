@@ -249,3 +249,76 @@ export async function updateReadingGoal(target: number) {
   revalidatePath('/shelf')
   return { success: true }
 }
+
+export async function updateStreak() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) return
+
+  const today = new Date().toISOString().split('T')[0]
+  
+  // Fetch current profile stats directly
+  const { data: profile } = await supabaseAdmin
+    .from('users')
+    .select('last_active_date, current_streak, longest_streak')
+    .eq('id', user.id)
+    .single()
+
+  if (!profile) return
+
+  const lastActive = profile.last_active_date
+  
+  if (lastActive === today) return // Already active today, no change
+
+  const yesterday = new Date()
+  yesterday.setDate(yesterday.getDate() - 1)
+  const yesterdayStr = yesterday.toISOString().split('T')[0]
+
+  let newStreak = 1
+  if (lastActive === yesterdayStr) {
+    newStreak = (profile.current_streak || 0) + 1
+  }
+
+  const newLongestStreak = Math.max(profile.longest_streak || 0, newStreak)
+
+  await supabaseAdmin.from('users').update({
+    last_active_date: today,
+    current_streak: newStreak,
+    longest_streak: newLongestStreak,
+    updated_at: new Date().toISOString()
+  }).eq('id', user.id)
+
+  revalidatePath('/shelf')
+}
+
+export async function addTag(workId: string, tagType: 'trope' | 'mood' | 'content_warning', tagValue: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('Unauthorized')
+
+  await supabaseAdmin.from('book_tags').upsert({
+    user_id: user.id,
+    work_id: workId,
+    tag_type: tagType,
+    tag_value: tagValue
+  })
+
+  revalidatePath('/shelf')
+}
+
+export async function removeTag(workId: string, tagType: 'trope' | 'mood' | 'content_warning', tagValue: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) throw new Error('Unauthorized')
+
+  await supabaseAdmin.from('book_tags').delete()
+    .eq('user_id', user.id)
+    .eq('work_id', workId)
+    .eq('tag_type', tagType)
+    .eq('tag_value', tagValue)
+
+  revalidatePath('/shelf')
+}

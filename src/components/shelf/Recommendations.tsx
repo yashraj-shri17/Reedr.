@@ -9,24 +9,52 @@ export function Recommendations({ seedBook }: { seedBook?: any }) {
 
   useEffect(() => {
     const fetchRecommendations = async () => {
-      // If no book, just show some default high-quality classics
-      const query = seedBook ? `subject:${seedBook.author}` : 'subject:literature+classic'
+      setLoading(true)
+      
+      // Construct a better Google Books query
+      let query = 'subject:fiction+literature' // default
+      if (seedBook) {
+        if (seedBook.author) query = `inauthor:${seedBook.author}`
+        else if (seedBook.title) query = `intitle:${seedBook.title}`
+      }
       
       try {
-        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=4`)
+        const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=4&orderBy=relevance&printType=books`)
         const data = await response.json()
         
-        if (data.items) {
-          const recs = data.items.map((item: any) => ({
+        let recs = []
+        if (data.items && data.items.length > 0) {
+          recs = data.items.map((item: any) => ({
             title: item.volumeInfo.title,
             author: item.volumeInfo.authors?.[0] || 'Unknown',
             coverUrl: item.volumeInfo.imageLinks?.thumbnail?.replace('http:', 'https:') || `https://covers.openlibrary.org/b/id/12836262-L.jpg`
           }))
-          setRecommendations(recs)
+        } else {
+          // If the specific query failed, try a very broad literary one
+          const fallbackResponse = await fetch(`https://www.googleapis.com/books/v1/volumes?q=subject:classic+literature&maxResults=4&orderBy=newest`)
+          const fallbackData = await fallbackResponse.json()
+          if (fallbackData.items) {
+             recs = fallbackData.items.map((item: any) => ({
+                title: item.volumeInfo.title,
+                author: item.volumeInfo.authors?.[0] || 'Unknown',
+                coverUrl: item.volumeInfo.imageLinks?.thumbnail?.replace('http:', 'https:') || `https://covers.openlibrary.org/b/id/12836262-L.jpg`
+             }))
+          }
         }
+        
+        if (recs.length === 0) {
+           // Final fallback to curated list if all API attempts fail
+           recs = [
+            { title: "Project Hail Mary", author: "Andy Weir", coverUrl: "https://covers.openlibrary.org/b/id/11182470-L.jpg" },
+            { title: "Circe", author: "Madeline Miller", coverUrl: "https://covers.openlibrary.org/b/id/9264426-L.jpg" },
+            { title: "A Promised Land", author: "Barack Obama", coverUrl: "https://covers.openlibrary.org/b/id/10419332-L.jpg" },
+            { title: "Silent Patient", author: "Alex Michaelides", coverUrl: "https://covers.openlibrary.org/b/id/8816550-L.jpg" }
+           ]
+        }
+        
+        setRecommendations(recs)
       } catch (error) {
         console.error("Failed to fetch recs:", error)
-        // Fallback to static if API fails
         setRecommendations([
           { title: "Project Hail Mary", author: "Andy Weir", coverUrl: "https://covers.openlibrary.org/b/id/11182470-L.jpg" },
           { title: "Circe", author: "Madeline Miller", coverUrl: "https://covers.openlibrary.org/b/id/9264426-L.jpg" }
