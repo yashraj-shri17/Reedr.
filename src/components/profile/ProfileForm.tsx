@@ -103,7 +103,7 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
       <div className="flex flex-col md:flex-row gap-8 items-start">
         {/* Photo Upload Section */}
         <div className="flex-shrink-0 space-y-4">
-          <div className="relative group">
+          <div className="relative group mx-auto md:mx-0">
             {profile.profile_photo_url ? (
                <img 
                  src={profile.profile_photo_url} 
@@ -116,9 +116,9 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
                </div>
             )}
             
-            <label className="absolute inset-0 flex items-center justify-center bg-black/40 text-white opacity-0 group-hover:opacity-100 rounded-[2.5rem] cursor-pointer transition-opacity">
+            <label className="absolute inset-0 flex items-center justify-center bg-black/40 text-white opacity-0 md:group-hover:opacity-100 rounded-[2.5rem] cursor-pointer transition-opacity">
               <span className="text-[10px] font-black uppercase tracking-widest text-center px-2">
-                {photoUploading ? 'Uploading...' : 'Change Photo'}
+                {photoUploading ? '...' : 'Change'}
               </span>
               <input 
                 type="file" 
@@ -129,7 +129,19 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
               />
             </label>
           </div>
-          <p className="text-center text-[10px] font-bold text-muted uppercase tracking-widest opacity-60">Avatar</p>
+          <div className="text-center space-y-2">
+            <p className="text-[10px] font-bold text-muted uppercase tracking-widest opacity-60">Avatar</p>
+            <label className="inline-block px-4 py-2 border border-accent/20 rounded-xl text-[10px] font-black uppercase tracking-widest text-accent cursor-pointer hover:bg-accent/5 transition-all">
+               {photoUploading ? 'Uploading...' : 'Upload Photo'}
+               <input 
+                type="file" 
+                accept="image/*" 
+                className="hidden" 
+                onChange={handlePhotoUpload}
+                disabled={photoUploading}
+              />
+            </label>
+          </div>
         </div>
 
         {/* Text Fields Section */}
