@@ -47,8 +47,8 @@ export default async function SearchPage() {
 
   return (
     <div className="max-w-7xl mx-auto py-16 px-4 selection:bg-accent/30">
-      <header className="text-center mb-24 space-y-4">
-        <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-foreground">
+      <header className="text-center mb-12 md:mb-24 space-y-4">
+        <h1 className="text-3xl md:text-8xl font-bold tracking-tight text-foreground">
           Expand your Library
         </h1>
         <p className="text-muted text-lg md:text-xl font-medium opacity-60">

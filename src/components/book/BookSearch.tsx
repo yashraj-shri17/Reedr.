@@ -48,8 +48,8 @@ export function BookSearch({ shelfId }: { shelfId: string }) {
     <div className="w-full max-w-4xl mx-auto space-y-16">
       <div className="relative group">
         <div className="absolute -inset-1 bg-accent/20 rounded-[3rem] blur group-focus-within:opacity-100 opacity-0 transition duration-1000" />
-        <div className="relative glass-panel rounded-[3rem] flex items-center shadow-2xl transition-all">
-          <div className="pl-10 pr-4">
+        <div className="relative glass-panel rounded-3xl md:rounded-[3rem] flex items-center shadow-2xl transition-all overflow-hidden">
+          <div className="pl-4 md:pl-10 pr-2 md:pr-4">
             <svg
               className="w-7 h-7 text-muted group-focus-within:text-accent transition-colors"
               fill="none"
@@ -66,10 +66,10 @@ export function BookSearch({ shelfId }: { shelfId: string }) {
           </div>
           <input
             type="text"
-            placeholder="Search for a masterpiece..."
+            placeholder="Search masterpiece..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="flex-1 bg-transparent py-8 pr-10 focus:outline-none text-2xl placeholder:text-muted/40 font-bold tracking-tight text-foreground"
+            className="flex-1 min-w-0 bg-transparent py-5 md:py-8 pr-4 md:pr-10 focus:outline-none text-lg md:text-2xl placeholder:text-muted/40 font-bold tracking-tight text-foreground truncate"
             suppressHydrationWarning
           />
         </div>
