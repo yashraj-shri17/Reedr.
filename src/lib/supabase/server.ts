@@ -11,6 +11,7 @@ export async function createClient() {
       auth: {
         getUser: async () => ({ data: { user: { id: 'mock-user', email: 'demo@reedr.co' } }, error: null }),
         getSession: async () => ({ data: { session: { user: { id: 'mock-user' } } }, error: null }),
+        exchangeCodeForSession: async () => ({ data: { session: { user: { id: 'mock-user' } } }, error: null }),
       },
       from: (table: string) => {
         const createQueryBuilder = (currentData: any) => {

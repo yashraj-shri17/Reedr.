@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { PageTransition } from '@/components/layout/PageTransition'
+import { UserNav } from '@/components/layout/UserNav'
 
 export default async function MainLayout({
   children,
@@ -39,6 +40,8 @@ export default async function MainLayout({
               </Link>
             ))}
           </nav>
+
+          <UserNav user={user} />
         </div>
       </header>
 

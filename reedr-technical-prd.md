@@ -108,6 +108,7 @@ BookTok users don't just want to track books -- they want to DISPLAY them. The s
 |---------|---------|---------|
 | Supabase (PostgreSQL) | Latest | Database + Auth + Storage + Realtime |
 | @supabase/supabase-js | 2.98.x | Isomorphic Supabase client |
+| @supabase/storage-js | 2.99.x | Supabase Storage client (browser + server-safe helpers) |
 | @supabase/ssr | Latest | Server-side auth for Next.js App Router |
 
 ### Payments
@@ -123,12 +124,13 @@ BookTok users don't just want to track books -- they want to DISPLAY them. The s
 | Package | Version | Purpose |
 |---------|---------|---------|
 | @anthropic-ai/sdk | 0.78.x | Claude API client (server-side only, never exposed to client) |
+| openai | 6.32.x | Optional/experimental OpenAI client (server-side only). Present in repo but not used for branded UX. |
 
 ### UI & Animation
 
 | Package | Version | Purpose |
 |---------|---------|---------|
-| motion | 12.35.x | Shelf transitions, book hover effects, page animations. Import from `motion/react` |
+| motion | 12.36.x | Shelf transitions, book hover effects, page animations. Import from `motion/react` |
 | zustand | 5.0.x | Client-side global state (1.16KB gzipped). Active shelf, filters, sort order |
 | sonner | 2.0.x | Toast notifications for success/error feedback |
 | next-themes | 0.4.x | System dark mode handling, localStorage persistence, no-flash-on-load |
@@ -137,6 +139,7 @@ BookTok users don't just want to track books -- they want to DISPLAY them. The s
 
 | Package | Version | Purpose |
 |---------|---------|---------|
+| groq-sdk | 1.1.x | GROQ client for querying content stores (used by some enrichment scripts) |
 | papaparse | 5.5.x | CSV parsing (Goodreads/StoryGraph import). Web Workers for large files |
 
 ### PWA
