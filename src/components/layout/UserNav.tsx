@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -12,7 +12,34 @@ interface UserNavProps {
 export function UserNav({ user }: UserNavProps) {
   const supabase = createClient()
   const router = useRouter()
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const [profile, setProfile] = useState<{ avatar_url: string | null; full_name: string | null }>({
+    avatar_url: user.user_metadata?.avatar_url || null,
+    full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Member'
+  })
+
+  // Fetch the latest profile data from public.users table to ensure synced UI
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { data, error } = await supabase
+        .from('users')
+        .select('profile_photo_url, display_name')
+        .eq('id', user.id)
+        .single()
+
+      if (!error && data) {
+        setProfile({
+          avatar_url: data.profile_photo_url || user.user_metadata?.avatar_url || null,
+          full_name: data.display_name || user.user_metadata?.full_name || user.email?.split('@')[0] || 'Member'
+        })
+      }
+    }
+
+    fetchProfile()
+    
+    // Set up a small interval or just re-fetch when navigation happens
+    // For now, we fetch once on mount and rely on router.refresh() from ProfileForm to re-fetch
+  }, [user.id, supabase])
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut()
@@ -25,8 +52,8 @@ export function UserNav({ user }: UserNavProps) {
     }
   }
 
-  const avatarUrl = user.user_metadata?.avatar_url
-  const fullName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Member'
+  const avatarUrl = profile.avatar_url
+  const fullName = profile.full_name || 'Member'
 
   return (
     <div className="relative">
@@ -38,12 +65,12 @@ export function UserNav({ user }: UserNavProps) {
           {avatarUrl ? (
             <img src={avatarUrl} alt={fullName} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-accent/10 text-accent text-xs font-black">
+            <div className="w-full h-full flex items-center justify-center bg-accent/10 text-accent text-[10px] font-black">
               {fullName.charAt(0).toUpperCase()}
             </div>
           )}
         </div>
-        <span className="hidden md:block text-[10px] font-black uppercase tracking-widest text-muted">{fullName}</span>
+        <span className="hidden md:block text-[10px] font-black uppercase tracking-widest text-muted truncate max-w-[100px]">{fullName}</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-muted/50"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
       </button>
 
