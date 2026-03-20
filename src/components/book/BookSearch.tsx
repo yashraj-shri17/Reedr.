@@ -76,9 +76,9 @@ export function BookSearch({ shelfId }: { shelfId: string }) {
       </div>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-32 space-y-8">
-          <div className="w-20 h-20 border-[6px] border-accent border-t-transparent animate-spin rounded-full shadow-2xl shadow-accent/20"></div>
-          <p className="text-accent font-black tracking-[0.4em] text-xs uppercase animate-pulse">Consulting the indices...</p>
+        <div className="flex flex-col items-center justify-center py-24 md:py-32 space-y-8 text-center px-6">
+          <div className="w-16 md:w-20 h-16 md:h-20 border-[6px] border-accent border-t-transparent animate-spin rounded-full shadow-2xl shadow-accent/20 mx-auto"></div>
+          <p className="text-accent font-black tracking-[0.3em] md:tracking-[0.4em] text-[10px] md:text-xs uppercase animate-pulse w-full text-center">Consulting the indices...</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 animate-in fade-in slide-in-from-bottom-8 duration-700">

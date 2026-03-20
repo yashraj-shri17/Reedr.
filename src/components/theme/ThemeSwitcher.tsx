@@ -55,12 +55,12 @@ export function ThemeSwitcher({ shelfId }: { shelfId?: string }) {
       <AnimatePresence>
         {isOpen && (
           <>
-            <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
+            <div className="fixed inset-0 z-[60]" onClick={() => setIsOpen(false)} />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="absolute right-0 top-full mt-4 z-50 glass-panel p-4 rounded-[2rem] w-64 space-y-2 border border-white/20 shadow-2xl"
+              className="absolute right-0 md:right-0 lg:right-0 mt-4 z-[70] glass-panel p-4 rounded-[2rem] w-64 space-y-2 border border-white/20 shadow-2xl"
             >
               <div className="px-3 py-2 mb-2">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Aesthetic Selection</p>
