@@ -27,7 +27,7 @@ export default async function LandingPage() {
         </nav>
 
         {/* Hero Section */}
-        <header className="relative pt-32 pb-48 px-4 overflow-hidden">
+        <header className="relative pt-12 md:pt-32 pb-16 md:pb-24 px-4 overflow-hidden">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] bg-accent/5 rounded-full blur-[160px] -z-10" />
           
           <div className="max-w-6xl mx-auto text-center space-y-16">
@@ -80,8 +80,8 @@ export default async function LandingPage() {
         </header>
 
         {/* Philosophy Section */}
-        <section id="features" className="py-48 px-8 border-y border-accent/5 relative overflow-hidden bg-white/[0.02]">
-          <div className="max-w-7xl mx-auto space-y-32">
+        <section id="features" className="py-24 md:py-32 px-8 border-y border-accent/5 relative overflow-hidden bg-white/[0.02]">
+          <div className="max-w-7xl mx-auto space-y-16 md:space-y-24">
             <div className="text-center space-y-6">
               <p className="text-accent font-black uppercase tracking-[0.4em] text-[10px] md:text-xs">Our Philosophy</p>
               <h2 className="text-4xl md:text-8xl font-black text-foreground tracking-tight max-w-4xl mx-auto font-serif leading-tight md:leading-none px-4">
@@ -123,7 +123,7 @@ export default async function LandingPage() {
           </div>
         </section>
 
-        <footer className="py-32 text-center space-y-10 bg-white/[0.01]">
+        <footer className="py-24 text-center space-y-10 bg-white/[0.01]">
           <div className="text-4xl font-black tracking-[0.6em] text-foreground/10 uppercase">REEDR</div>
           <div className="space-y-2">
             <p className="text-muted text-[10px] font-black uppercase tracking-[0.4em]">Digital Galleries • Est. 2026</p>
