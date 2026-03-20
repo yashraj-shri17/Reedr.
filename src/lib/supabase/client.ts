@@ -13,6 +13,7 @@ export function createClient() {
         signInWithPassword: async () => ({ data: { user: { id: 'mock-user' } }, error: null }),
         signInWithOAuth: async () => ({ data: { url: window.location.origin + '/auth/callback' }, error: null }),
         signInWithOtp: async () => ({ data: { user: null }, error: null }),
+        verifyOtp: async () => ({ data: { user: { id: 'mock-user' } }, error: null }),
         signOut: async () => ({ error: null }),
         onAuthStateChange: (cb: any) => {
           cb('SIGNED_IN', { user: { id: 'mock-user' } })
