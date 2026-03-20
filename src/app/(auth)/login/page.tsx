@@ -69,7 +69,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="glass-panel p-10 rounded-[2.5rem] border-none shadow-2xl space-y-8 max-w-md w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="glass-panel p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border-none shadow-2xl space-y-6 md:space-y-8 max-w-md w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="text-center space-y-2">
         <h2 className="text-4xl font-bold text-foreground">Secure Entry</h2>
         <p className="text-muted text-sm font-medium opacity-60 italic font-serif">

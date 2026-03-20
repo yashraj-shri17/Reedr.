@@ -16,9 +16,9 @@ export function CurrentlyReading({ book, onUpdateClick }: CurrentlyReadingProps)
     : 0
 
   return (
-    <div className="flex flex-col md:flex-row items-center gap-16 glass-panel p-12 rounded-[3.5rem] mb-24 relative overflow-hidden group border-none shadow-2xl">
+    <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 glass-panel p-6 md:p-12 rounded-[2.5rem] md:rounded-[3.5rem] mb-12 md:mb-24 relative overflow-hidden group border-none shadow-2xl mx-4 md:mx-0">
       {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-[120px] -mr-48 -mt-48 group-hover:bg-accent/10 transition-all duration-700" />
+      <div className="absolute top-0 right-0 w-48 md:96 h-48 md:96 bg-accent/5 rounded-full blur-[80px] md:blur-[120px] -mr-24 md:-mr-48 -mt-24 md:-mt-48 group-hover:bg-accent/10 transition-all duration-700" />
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 rounded-full blur-[100px] -ml-32 -mb-32" />
 
       {/* Book on 3D Easel Stand */}
@@ -52,12 +52,12 @@ export function CurrentlyReading({ book, onUpdateClick }: CurrentlyReadingProps)
       <div className="flex-1 text-center md:text-left z-10 space-y-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-4">
-            <span className="inline-flex items-center gap-2 bg-accent/10 text-accent text-[10px] font-black uppercase tracking-[0.2em] px-5 py-2 rounded-full border border-accent/20">
+            <span className="inline-flex items-center gap-2 bg-accent/10 text-accent text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] px-4 md:px-5 py-2 rounded-full border border-accent/20">
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
               Currently Reading
             </span>
-            <h2 className="text-5xl md:text-6xl font-bold leading-tight text-foreground tracking-tight line-clamp-2">{book.title}</h2>
-            <p className="text-2xl text-muted font-serif italic opacity-70">by {book.author}</p>
+            <h2 className="text-3xl md:text-6xl font-bold leading-tight text-foreground tracking-tight line-clamp-2">{book.title}</h2>
+            <p className="text-xl md:text-2xl text-muted font-serif italic opacity-70">by {book.author}</p>
           </div>
 
           <button 

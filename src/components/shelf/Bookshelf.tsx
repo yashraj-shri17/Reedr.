@@ -22,9 +22,8 @@ interface BookshelfProps {
 export default function Bookshelf({ books, shelf, isPublicView, onBookClick }: BookshelfProps) {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null)
 
-  // Organize books into rows (PRD 9.1: 3-4 visible on mobile, etc.)
-  // We'll group them for desktop perspective
-  const booksPerRow = 8
+  // Organize books into rows
+  const booksPerRow = 12
   const rows: Book[][] = []
   for (let i = 0; i < books.length; i += booksPerRow) {
     rows.push(books.slice(i, i + booksPerRow))
@@ -41,7 +40,7 @@ export default function Bookshelf({ books, shelf, isPublicView, onBookClick }: B
   }
 
   return (
-    <div className={`w-full py-12 ${shelf?.theme || 'minimalist'}`}>
+    <div className={`w-full py-6 md:py-12 ${shelf?.theme || 'minimalist'}`}>
       <div className="container mx-auto">
         {rows.map((row, rowIndex) => (
           <ShelfRow 

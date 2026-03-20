@@ -10,8 +10,8 @@ export default async function LandingPage() {
     <PageTransition>
       <div className="min-h-screen bg-background selection:bg-accent/30 grainy relative isolate">
         {/* Navigation Header */}
-        <nav className="flex items-center justify-between px-8 md:px-16 py-10 max-w-7xl mx-auto relative z-50">
-          <div className="text-3xl font-black tracking-[0.4em] uppercase text-foreground/80">
+        <nav className="flex items-center justify-between px-6 md:px-16 py-8 md:py-10 max-w-7xl mx-auto relative z-50">
+          <div className="text-xl md:text-3xl font-black tracking-[0.4em] uppercase text-foreground/80">
             REEDR
           </div>
           <div className="hidden md:flex items-center gap-12">
@@ -32,34 +32,34 @@ export default async function LandingPage() {
           
           <div className="max-w-6xl mx-auto text-center space-y-16">
             <div className="space-y-6">
-              <p className="text-accent font-black uppercase tracking-[0.6em] text-xs">Digital Collections</p>
-              <h1 className="text-7xl md:text-9xl font-black text-foreground tracking-tighter leading-[0.8] font-serif py-4">
+              <p className="text-accent font-black uppercase tracking-[0.6em] text-[10px] md:text-xs">Digital Collections</p>
+              <h1 className="text-5xl md:text-9xl font-black text-foreground tracking-tighter leading-[1.1] md:leading-[0.8] font-serif py-4">
                 <span className="text-gradient">Where readers</span> <br />
                 <span className="italic opacity-80">exhibit.</span>
               </h1>
             </div>
             
-            <p className="text-xl md:text-2xl text-muted font-medium max-w-2xl mx-auto leading-relaxed font-serif italic opacity-60">
+            <p className="text-lg md:text-2xl text-muted font-medium max-w-2xl mx-auto leading-relaxed font-serif italic opacity-60 px-4">
               Transform your reading list into a stunning digital gallery. Built for those who care about the aesthetics of literature.
             </p>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-8 pt-6 px-8">
               <Link 
-                href="/signup" 
-                className="w-full sm:w-auto bg-foreground text-background px-12 py-6 rounded-[2.5rem] font-black text-xs uppercase tracking-[0.4em] hover:scale-105 transition-all shadow-2xl shadow-foreground/10"
+                href="/login" 
+                className="w-full sm:w-auto bg-foreground text-background px-10 md:px-12 py-5 md:py-6 rounded-[2.5rem] font-black text-[10px] md:text-xs uppercase tracking-[0.4em] hover:scale-105 transition-all shadow-2xl shadow-foreground/10"
               >
                 Curate Your Space
               </Link>
               <Link 
                 href="/discover" 
-                className="w-full sm:w-auto bg-white/40 backdrop-blur-md border border-accent/20 text-foreground px-12 py-6 rounded-[2.5rem] font-black text-xs uppercase tracking-[0.4em] hover:bg-white transition-all"
+                className="w-full sm:w-auto bg-white/40 backdrop-blur-md border border-accent/20 text-foreground px-10 md:px-12 py-5 md:py-6 rounded-[2.5rem] font-black text-[10px] md:text-xs uppercase tracking-[0.4em] hover:bg-white transition-all"
               >
                 Explore Galleries
               </Link>
             </div>
 
             {/* Book Preview Strip */}
-            <div className="pt-32 flex justify-center gap-6 md:gap-10 perspective-1000">
+            <div className="pt-20 md:pt-32 flex justify-center gap-4 md:gap-10 perspective-1000 overflow-hidden px-4">
                {[
                  "https://covers.openlibrary.org/b/id/12836262-L.jpg",
                  "https://covers.openlibrary.org/b/id/8231901-L.jpg",
@@ -68,7 +68,7 @@ export default async function LandingPage() {
                ].map((url, i) => (
                  <div 
                    key={i} 
-                   className="w-28 md:w-56 aspect-[2/3] rounded-xl shadow-2xl overflow-hidden preserve-3d animate-float"
+                   className={`${i > 1 ? 'hidden sm:block' : ''} w-24 md:w-56 aspect-[2/3] rounded-xl shadow-2xl overflow-hidden preserve-3d animate-float`}
                    style={{ animationDelay: `${i * 0.4}s` }}
                  >
                    <img src={url} alt="Book cover" className="w-full h-full object-cover transition-transform duration-700 hover:scale-110" />
@@ -83,8 +83,8 @@ export default async function LandingPage() {
         <section id="features" className="py-48 px-8 border-y border-accent/5 relative overflow-hidden bg-white/[0.02]">
           <div className="max-w-7xl mx-auto space-y-32">
             <div className="text-center space-y-6">
-              <p className="text-accent font-black uppercase tracking-[0.4em] text-xs">Our Philosophy</p>
-              <h2 className="text-5xl md:text-8xl font-black text-foreground tracking-tight max-w-4xl mx-auto font-serif leading-none">
+              <p className="text-accent font-black uppercase tracking-[0.4em] text-[10px] md:text-xs">Our Philosophy</p>
+              <h2 className="text-4xl md:text-8xl font-black text-foreground tracking-tight max-w-4xl mx-auto font-serif leading-tight md:leading-none px-4">
                 A gallery, <br />not a spreadsheet.
               </h2>
             </div>
