@@ -19,6 +19,7 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
   const [showSubRatings, setShowSubRatings] = useState(false)
   const [showWarnings, setShowWarnings] = useState(false)
   const [notes, setNotes] = useState('')
+  const [status, setStatus] = useState('')
   const [tags, setTags] = useState<any[]>([])
   const [loadingTags, setLoadingTags] = useState(false)
   const [newTagVal, setNewTagVal] = useState('')
@@ -37,6 +38,7 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
   useEffect(() => {
     if (book && isOpen) {
       setNotes(book.notes || '')
+      setStatus(book.reading_status || 'want_to_read')
       setRatings({
         main: book.rating || 0,
         plot: book.rating_plot || 0,
@@ -95,7 +97,8 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
         rating_characters: ratings.chars,
         rating_writing: ratings.writing,
         rating_enjoyment: ratings.enjoyment,
-        notes: notes
+        notes: notes,
+        reading_status: status
       })
       if (response.success) {
         toast.success("Gallery record updated successfully")
@@ -168,6 +171,25 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
                   </div>
 
                   <div className="space-y-8">
+                    <div className="space-y-4">
+                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted pl-1">Library Status</label>
+                      <div className="grid grid-cols-2 gap-3">
+                        {['Read', 'Currently Reading', 'Want to Read', 'DNF'].map((s) => {
+                           const statusVal = s.toLowerCase().replace(/ /g, '_')
+                           const isActive = status === statusVal
+                           return (
+                             <button 
+                               key={s} 
+                               onClick={() => setStatus(statusVal)}
+                               className={`px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${isActive ? 'bg-accent text-white border-accent shadow-lg shadow-accent/20' : 'bg-background hover:border-accent/40 border-border'}`}
+                             >
+                               {s}
+                             </button>
+                           )
+                        })}
+                      </div>
+                    </div>
+
                     <QuarterStarRating 
                       label="Main Rating"
                       value={ratings.main} 
@@ -206,7 +228,7 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
                   />
               </div>
 
-              {/* Tags Implementation */}
+              {/* Tags */}
               <div className="space-y-8 pt-10 border-t border-border">
                   <div className="space-y-6">
                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Atmosphere & Moods</label>
