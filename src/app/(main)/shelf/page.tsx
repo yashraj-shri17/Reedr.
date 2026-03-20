@@ -49,14 +49,14 @@ export default function ShelfPage() {
     <div className="max-w-7xl mx-auto space-y-24 py-24 px-4">
       <header className="space-y-16">
         {/* Layer 1: Identity & Primary Navigation */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 border-b border-accent/10 pb-16">
+        <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-10 md:gap-12 border-b border-accent/10 pb-12 md:pb-16 text-center md:text-left">
           <div className="space-y-4">
-            <h1 className="text-8xl md:text-[10rem] font-black text-foreground tracking-tighter leading-[0.75] font-serif">
+            <h1 className="text-5xl md:text-8xl lg:text-[10rem] font-black text-foreground tracking-tighter leading-tight md:leading-[0.75] font-serif uppercase">
               {shelf?.name || 'My Shelf'}
             </h1>
-            <div className="flex items-center gap-3">
-               <div className="h-px w-12 bg-accent opacity-60" />
-                <p className="text-accent text-[10px] font-black uppercase tracking-[0.4em] opacity-80">
+            <div className="flex items-center justify-center md:justify-start gap-3">
+               <div className="h-px w-8 md:w-12 bg-accent opacity-60" />
+                <p className="text-accent text-[8px] md:text-[10px] font-black uppercase tracking-[0.4em] opacity-80">
                   Curated in <span className="underline underline-offset-8">{themeDisplayNames[currentTheme]}</span>
                 </p>
             </div>
