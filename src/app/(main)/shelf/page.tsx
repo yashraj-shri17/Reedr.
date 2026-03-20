@@ -16,7 +16,7 @@ import { ReadingStreak } from '@/components/profile/ReadingStreak'
 import ShareProfileButton from '@/components/profile/ShareProfileButton'
 
 export default function ShelfPage() {
-  const { shelf, books, goal, streak, loading, username, refresh } = useShelf()
+  const { shelf, books, goal, streak, isPlus, loading, username, refresh } = useShelf()
   const { currentTheme } = useShelfTheme()
   const themeDisplayNames: Record<string, string> = {
     minimalist: 'Boutique',
@@ -162,6 +162,7 @@ export default function ShelfPage() {
         isOpen={!!selectedBook} 
         onClose={() => setSelectedBook(null)} 
         onUpdate={() => refresh()}
+        isPlus={isPlus}
       />
     </div>
   )

@@ -10,7 +10,7 @@ export default async function SettingsPage() {
   // Profile data for identity
   const { data: profile } = await supabase
     .from('users')
-    .select('username, display_name, bio, profile_photo_url')
+    .select('username, display_name, bio, profile_photo_url, subscription_tier')
     .eq('id', user?.id)
     .single()
 
@@ -73,12 +73,14 @@ export default async function SettingsPage() {
                  <h2 className="text-xs font-black uppercase tracking-[0.4em] text-accent">Gallery Tier</h2>
                  <div className="flex items-center gap-3">
                    <p className="text-[10px] font-black opacity-30 uppercase tracking-[0.4em]">Current:</p>
-                   <span className="bg-accent text-white px-3 py-1 text-[8px] font-black uppercase tracking-widest rounded-lg italic">Standard</span>
+                   <span className="bg-accent text-white px-3 py-1 text-[8px] font-black uppercase tracking-widest rounded-lg italic">
+                     {profile?.subscription_tier === 'plus' ? 'Plus' : 'Standard'}
+                   </span>
                  </div>
                </div>
                <div className="pt-4 md:pt-8 mt-auto">
                   <Link href="/pricing" className="btn-primary w-full inline-block text-center py-5 text-xs shadow-2xl shadow-accent/20">
-                    Upgrade to PLUS
+                    {profile?.subscription_tier === 'plus' ? 'Manage Subscription' : 'Upgrade to PLUS'}
                   </Link>
                </div>
              </section>

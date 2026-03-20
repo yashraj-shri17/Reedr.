@@ -6,15 +6,17 @@ import { QuarterStarRating } from './QuarterStarRating'
 import { updateBookDetails, addTag, removeTag } from '@/lib/books/actions'
 import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
+import Link from 'next/link'
 
 interface BookDetailOverlayProps {
   book: any | null
   isOpen: boolean
   onClose: () => void
   onUpdate?: () => void
+  isPlus?: boolean
 }
 
-export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetailOverlayProps) {
+export function BookDetailOverlay({ book, isOpen, onClose, onUpdate, isPlus = false }: BookDetailOverlayProps) {
   const [isSaving, setIsSaving] = useState(false)
   const [showSubRatings, setShowSubRatings] = useState(false)
   const [showWarnings, setShowWarnings] = useState(false)
@@ -93,11 +95,11 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
     try {
       const response = await updateBookDetails(book.id, {
         rating: ratings.main,
-        rating_plot: ratings.plot,
-        rating_characters: ratings.chars,
-        rating_writing: ratings.writing,
-        rating_enjoyment: ratings.enjoyment,
-        notes: notes,
+        rating_plot: isPlus ? ratings.plot : null,
+        rating_characters: isPlus ? ratings.chars : null,
+        rating_writing: isPlus ? ratings.writing : null,
+        rating_enjoyment: isPlus ? ratings.enjoyment : null,
+        notes: isPlus ? notes : null,
         reading_status: status
       })
       if (response.success) {
@@ -198,12 +200,18 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
 
                     <div className="space-y-4 pt-4 border-t border-border">
                        <button onClick={() => setShowSubRatings(!showSubRatings)} className="flex items-center gap-2 group mx-auto md:mx-0">
-                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">Detailed Review (Plus)</span>
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-accent">Detailed Review </span>
+                          {!isPlus && <span className="bg-accent text-white px-2 py-0.5 rounded-full text-[8px] font-black">PLUS</span>}
                           <svg className={`w-4 h-4 text-accent transition-transform ${showSubRatings ? 'rotate-180' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="m6 9 6 6 6-6"/></svg>
                        </button>
 
                        {showSubRatings && (
-                         <div className="space-y-6 pt-2 animate-in fade-in slide-in-from-top-4 duration-500">
+                         <div className="space-y-6 pt-2 animate-in fade-in slide-in-from-top-4 duration-500 relative">
+                             {!isPlus && (
+                               <div className="absolute inset-0 bg-surface/40 backdrop-blur-[2px] z-10 flex items-center justify-center p-6 text-center">
+                                  <Link href="/pricing" className="bg-white text-black px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">Unlock Analytics</Link>
+                               </div>
+                             )}
                              <QuarterStarRating label="Plot" isPlusOnly value={ratings.plot} onChange={(v) => setRatings({...ratings, plot: v})} />
                              <QuarterStarRating label="Characters" isPlusOnly value={ratings.chars} onChange={(v) => setRatings({...ratings, chars: v})} />
                              <QuarterStarRating label="Writing" isPlusOnly value={ratings.writing} onChange={(v) => setRatings({...ratings, writing: v})} />
@@ -215,20 +223,27 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
                 </div>
               </div>
 
-              {/* Private Notes */}
-              <div className="space-y-4 pt-10 border-t border-border">
+              {/* Private Notes (Plus only) */}
+              <div className="space-y-4 pt-10 border-t border-border group relative">
                   <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted">
-                    Private Gallery Notes <span className="text-accent underline">PLUS</span>
+                    Private Gallery Notes 
+                    {!isPlus && <span className="bg-accent text-white px-2 py-0.5 rounded-full text-[8px] font-black">PLUS</span>}
                   </label>
-                  <textarea 
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Write your personal thoughts or favorite bookish moments here..."
-                    className="w-full h-32 bg-background border border-border rounded-3xl p-6 text-sm font-medium focus:outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent transition-all leading-relaxed"
-                  />
+                  <div className="relative">
+                    <textarea 
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      disabled={!isPlus}
+                      placeholder={isPlus ? "Write your personal thoughts or favorite bookish moments here..." : "Upgrade to Plus to record and save detailed personal notes for your library."}
+                      className={`w-full h-32 bg-background border border-border rounded-3xl p-6 text-sm font-medium focus:outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent transition-all leading-relaxed ${!isPlus ? 'opacity-40 cursor-not-allowed grayscale' : ''}`}
+                    />
+                    {!isPlus && (
+                       <Link href="/pricing" className="absolute inset-x-0 bottom-4 text-center text-[8px] font-black uppercase tracking-[0.3em] text-accent opacity-0 group-hover:opacity-100 transition-opacity">Upgrade to Write</Link>
+                    )}
+                  </div>
               </div>
 
-              {/* Tags */}
+              {/* Tags Section */}
               <div className="space-y-8 pt-10 border-t border-border">
                   <div className="space-y-6">
                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Atmosphere & Moods</label>

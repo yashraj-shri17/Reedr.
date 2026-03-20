@@ -8,6 +8,7 @@ export function useShelf() {
   const [goal, setGoal] = useState<{ current: number, target: number }>({ current: 0, target: 50 })
   const [username, setUsername] = useState<string | null>(null)
   const [streak, setStreak] = useState(0)
+  const [isPlus, setIsPlus] = useState(false)
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
 
@@ -47,7 +48,7 @@ export function useShelf() {
         .single(),
       (supabase as any)
         .from('users')
-        .select('username, current_streak')
+        .select('username, current_streak, subscription_tier')
         .eq('id', user.id)
         .single(),
       (supabase as any)
@@ -65,6 +66,7 @@ export function useShelf() {
     if (profileData?.username) {
       setUsername(profileData.username)
       setStreak(profileData.current_streak || 0)
+      setIsPlus(profileData.subscription_tier === 'plus')
     }
 
     if (goalData) {
@@ -131,5 +133,5 @@ export function useShelf() {
     updateStreak() // Attempt to update streak on every shelf visit
   }, [fetchShelf])
 
-  return { shelf, books, goal, streak, loading, username, refresh: fetchShelf }
+  return { shelf, books, goal, streak, isPlus, loading, username, refresh: fetchShelf }
 }
