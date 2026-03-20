@@ -88,6 +88,16 @@ export function ProfileForm({ initialProfile }: ProfileFormProps) {
         .eq('id', user.id)
 
       if (error) throw error
+
+      // 2. Synchronize with Auth Metadata so it reflects in the Nav profile 
+      const { error: authError } = await supabase.auth.updateUser({
+        data: { 
+          avatar_url: profile.profile_photo_url,
+          full_name: profile.display_name 
+        }
+      })
+
+      if (authError) console.error("Could not sync auth metadata:", authError)
       
       toast.success('Boutique Identity Updated!')
       router.refresh()
