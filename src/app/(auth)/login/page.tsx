@@ -31,6 +31,29 @@ export default function LoginPage() {
     }
   }
 
+  const handleMagicLink = async () => {
+    if (!email) {
+      toast.error('Please enter your email address first')
+      return
+    }
+
+    setLoading(true)
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+
+    if (error) {
+       toast.error(error.message)
+       setLoading(false)
+    } else {
+       toast.success('Magic link sent! Check your email.')
+       setLoading(false)
+    }
+  }
+
   const handleGoogleLogin = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -74,13 +97,23 @@ export default function LoginPage() {
             required
           />
         </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn-primary w-full py-5 text-sm"
-        >
-          {loading ? 'Consulting Records...' : 'Sign In'}
-        </button>
+        <div className="grid grid-cols-2 gap-4">
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-primary w-full py-5 text-sm"
+          >
+            {loading ? '...' : 'Sign In'}
+          </button>
+          <button
+            onClick={handleMagicLink}
+            type="button"
+            disabled={loading}
+            className="w-full bg-accent/5 hover:bg-accent/10 text-accent font-black text-[10px] uppercase tracking-widest rounded-2xl transition-all border border-accent/10"
+          >
+            {loading ? 'Sending...' : 'Mail OTP'}
+          </button>
+        </div>
       </form>
 
       <div className="space-y-6">
