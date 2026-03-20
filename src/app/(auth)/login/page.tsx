@@ -29,7 +29,7 @@ export default function LoginPage() {
       toast.error(error.message)
       setLoading(false)
     } else {
-      toast.success('Wait for the 6-digit code in your email!')
+      toast.success('Wait for the 8-digit code in your email!')
       setStep('otp')
       setLoading(false)
     }
@@ -101,14 +101,14 @@ export default function LoginPage() {
       ) : (
         <form onSubmit={handleVerifyOtp} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted pl-4">6-Digit Code</label>
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted pl-4">8-Digit Access Code</label>
             <input
               type="text"
-              maxLength={6}
+              maxLength={8}
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              placeholder="000000"
-              className="w-full bg-background border border-border rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent transition-all text-center text-2xl font-black tracking-[0.5em]"
+              placeholder="00000000"
+              className="w-full bg-background border border-border rounded-2xl px-6 py-4 focus:outline-none focus:ring-4 focus:ring-accent/10 focus:border-accent transition-all text-center text-xl font-black tracking-[0.4em]"
               required
             />
           </div>
