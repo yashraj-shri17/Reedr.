@@ -161,6 +161,7 @@ export default function ShelfPage() {
         book={selectedBook} 
         isOpen={!!selectedBook} 
         onClose={() => setSelectedBook(null)} 
+        onUpdate={() => refresh()}
       />
     </div>
   )

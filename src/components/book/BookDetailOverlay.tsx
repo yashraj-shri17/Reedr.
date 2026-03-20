@@ -21,6 +21,8 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
   const [notes, setNotes] = useState('')
   const [tags, setTags] = useState<any[]>([])
   const [loadingTags, setLoadingTags] = useState(false)
+  const [newTagVal, setNewTagVal] = useState('')
+  const [tagType, setTagType] = useState<'mood' | 'trope' | 'content_warning'>('mood')
   
   const supabase = createClient()
 
@@ -47,12 +49,8 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
   }, [book, isOpen])
 
   const fetchTags = async () => {
-    if (!book?.work_id) {
-       // Fallback if work_id is in a different place
-       const workId = book.works?.id || book.workId
-       if (!workId) return
-    }
     const workId = book.work_id || book.works?.id || book.workId
+    if (!workId) return
     
     setLoadingTags(true)
     const { data } = await supabase
@@ -64,10 +62,14 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
     setLoadingTags(false)
   }
 
-  const handleAddTag = async (type: 'trope' | 'mood' | 'content_warning', value: string) => {
+  const handleAddTagSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newTagVal.trim()) return
+    
     const workId = book.work_id || book.works?.id || book.workId
     try {
-      await addTag(workId, type, value)
+      await addTag(workId, tagType, newTagVal.trim())
+      setNewTagVal('')
       fetchTags()
     } catch (e) {
       toast.error("Could not add tag")
@@ -87,7 +89,7 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
     if (!book?.id) return
     setIsSaving(true)
     try {
-      await updateBookDetails(book.id, {
+      const response = await updateBookDetails(book.id, {
         rating: ratings.main,
         rating_plot: ratings.plot,
         rating_characters: ratings.chars,
@@ -95,9 +97,11 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
         rating_enjoyment: ratings.enjoyment,
         notes: notes
       })
-      toast.success("Gallery record updated successfully")
-      onUpdate?.()
-      onClose()
+      if (response.success) {
+        toast.success("Gallery record updated successfully")
+        if (onUpdate) onUpdate()
+        onClose()
+      }
     } catch (e) {
       toast.error("Failed to save changes")
     } finally {
@@ -108,8 +112,7 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
   if (!book) return null
 
   const moods = tags.filter(t => t.tag_type === 'mood')
-  const tropes = tags.filter(t => t.tag_type === 'trope')
-  const warnings = tags.filter(t => t.tag_type === 'content_warning')
+  const warningTags = tags.filter(t => t.tag_type === 'content_warning')
 
   return (
     <AnimatePresence>
@@ -152,7 +155,7 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
 
                 <div className="flex-1 space-y-8 text-center md:text-left">
                   <div className="space-y-3">
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight text-foreground">{book.title}</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight leading-loose text-foreground">{book.title}</h2>
                     <p className="text-xl text-muted font-medium italic opacity-70">by {book.author}</p>
                   </div>
                   
@@ -165,20 +168,6 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
                   </div>
 
                   <div className="space-y-8">
-                    <div className="space-y-4">
-                      <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted pl-1">Library Status</label>
-                      <div className="grid grid-cols-2 gap-3">
-                        {['Read', 'Currently Reading', 'Want to Read', 'DNF'].map((s) => (
-                           <button 
-                             key={s} 
-                             className={`px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all ${book.reading_status === s.toLowerCase().replace(/ /g, '_') ? 'bg-accent text-white border-accent shadow-lg shadow-accent/20' : 'bg-background hover:border-accent/40 border-border'}`}
-                           >
-                             {s}
-                           </button>
-                        ))}
-                      </div>
-                    </div>
-
                     <QuarterStarRating 
                       label="Main Rating"
                       value={ratings.main} 
@@ -207,8 +196,7 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
               {/* Private Notes */}
               <div className="space-y-4 pt-10 border-t border-border">
                   <label className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted">
-                    Private Gallery Notes 
-                    <span className="bg-accent text-white px-2 py-0.5 rounded-full text-[8px] font-black">PLUS</span>
+                    Private Gallery Notes <span className="text-accent underline">PLUS</span>
                   </label>
                   <textarea 
                     value={notes}
@@ -218,67 +206,71 @@ export function BookDetailOverlay({ book, isOpen, onClose, onUpdate }: BookDetai
                   />
               </div>
 
-              {/* Tags Section */}
+              {/* Tags Implementation */}
               <div className="space-y-8 pt-10 border-t border-border">
-                  <div className="space-y-4">
-                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Moods & Atmosphere</label>
-                     <div className="flex flex-wrap gap-2">
+                  <div className="space-y-6">
+                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Atmosphere & Moods</label>
+                     <div className="flex flex-wrap gap-2 min-h-8">
                         {moods.map(tag => (
                           <span key={tag.id} className="flex items-center gap-2 px-4 py-2 bg-accent/5 text-accent text-[10px] font-black uppercase tracking-widest rounded-xl border border-accent/10">
                             {tag.tag_value}
-                            <button onClick={() => handleRemoveTag(tag)} className="hover:text-red-500">×</button>
+                            <button onClick={() => handleRemoveTag(tag)} className="hover:text-red-500 text-lg leading-none">×</button>
                           </span>
                         ))}
-                        <button 
-                          onClick={() => {
-                            const val = prompt('Enter a mood (e.g. Cozy, Dark, Wishful)')
-                            if (val) handleAddTag('mood', val)
-                          }}
-                          className="px-4 py-2 border border-dashed border-accent/30 text-accent/50 text-[10px] font-black uppercase tracking-widest rounded-xl hover:border-accent/60 transition-all"
-                        >
-                          + Add Mood
-                        </button>
                      </div>
+                     <form onSubmit={handleAddTagSubmit} className="flex gap-2">
+                        <input 
+                          value={newTagVal}
+                          onChange={(e) => setNewTagVal(e.target.value)}
+                          placeholder="Type a mood (e.g. Cozy, Dark)"
+                          className="flex-1 bg-background border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-accent"
+                          onFocus={() => setTagType('mood')}
+                        />
+                        <button type="submit" className="px-6 py-2 bg-accent/10 text-accent text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-accent hover:text-white transition-all">Add</button>
+                     </form>
                   </div>
 
                   <div className="space-y-4">
                      <div className="flex items-center justify-between">
                         <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Content Warnings</label>
-                        <button onClick={() => setShowWarnings(!showWarnings)} className="text-[10px] font-black uppercase tracking-widest text-accent hover:underline">{showWarnings ? 'Hide' : 'Manage'}</button>
+                        <button onClick={() => setShowWarnings(!showWarnings)} className="text-[10px] font-black uppercase tracking-widest text-accent hover:underline">{showWarnings ? 'Hide' : 'Add Warnings'}</button>
                      </div>
                      {showWarnings && (
                         <div className="bg-red-50/50 border border-red-200/50 rounded-3xl p-6 space-y-4">
                            <div className="flex flex-wrap gap-2">
-                              {warnings.map(tag => (
+                              {warningTags.map(tag => (
                                 <span key={tag.id} className="flex items-center gap-2 px-3 py-1.5 bg-red-100 text-red-900/80 text-[10px] font-bold rounded-xl uppercase tracking-widest border border-red-200">
                                   {tag.tag_value}
                                   <button onClick={() => handleRemoveTag(tag)}>×</button>
                                 </span>
                               ))}
-                              <button 
-                                onClick={() => {
-                                  const val = prompt('Enter a warning (e.g. Grief, Violence)')
-                                  if (val) handleAddTag('content_warning', val)
-                                }}
-                                className="px-3 py-1.5 bg-white text-accent text-[10px] font-bold rounded-xl uppercase tracking-widest border border-accent/20"
-                              >
-                                + Flag Warning
-                              </button>
                            </div>
-                           <p className="text-[8px] font-medium text-red-900/40 uppercase tracking-widest leading-loose">Community-sourced indicators help others read safely.</p>
+                           <div className="flex gap-2">
+                              <input 
+                                placeholder="Flag a warning..."
+                                className="flex-1 bg-white border border-red-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-500"
+                                onKeyPress={(e) => {
+                                   if (e.key === 'Enter') {
+                                      e.preventDefault()
+                                      setTagType('content_warning')
+                                      handleAddTagSubmit(e as any)
+                                   }
+                                }}
+                              />
+                           </div>
                         </div>
                      )}
                   </div>
               </div>
 
-              {/* Action Footer */}
+              {/* Actions */}
               <div className="pt-6 flex gap-4">
                 <button 
                   className="btn-primary flex-1 py-5 text-sm disabled:opacity-50" 
                   onClick={handleSave}
                   disabled={isSaving}
                 >
-                  {isSaving ? 'Syncing...' : 'Update Record'}
+                  {isSaving ? 'Synchronizing...' : 'Update & Record'}
                 </button>
                 <button className="bg-red-50 text-red-900/40 p-5 rounded-3xl hover:bg-red-100 hover:text-red-900 transition-colors">
                   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
